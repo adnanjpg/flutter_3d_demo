@@ -13,9 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const MyHomePage(),
-    );
+    return const MaterialApp(home: MyHomePage());
   }
 }
 
@@ -31,8 +29,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('rx: $_rx, ry: $_ry, rz: $_rz');
-
     return GestureDetector(
       onPanUpdate: (details) {
         _rx += details.delta.dx;
@@ -90,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class _AngleSlider extends StatefulWidget {
+class _AngleSlider extends StatelessWidget {
   final double angle;
   final void Function(double)? onChanged;
 
@@ -101,30 +97,12 @@ class _AngleSlider extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_AngleSlider> createState() => _AngleSliderState();
-}
-
-class _AngleSliderState extends State<_AngleSlider> {
-  late double _angle;
-
-  @override
-  void initState() {
-    _angle = widget.angle;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Slider.adaptive(
-      value: _angle,
+      value: angle,
       min: 0,
       max: twoPIs,
-      onChanged: (value) {
-        _angle = value;
-        setState(() {});
-
-        widget.onChanged?.call(value);
-      },
+      onChanged: onChanged?.call,
     );
   }
 }
@@ -135,61 +113,87 @@ class Cube extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        Transform(
-          transform: Matrix4.identity()
-            ..translate(.0, 100.0, .0)
-            ..rotateX(-pi / 2)
-          //
-          ,
-          alignment: Alignment.center,
-          child: Container(
-            color: Colors.blue,
-            child: const FlutterLogo(
-              size: 200,
-            ),
-          ),
+      children: const [
+        CubeFace(
+          color: Colors.blue,
+          translateY: 100.0,
+          rotateX: -pi / 2,
         ),
-        Transform(
-          transform: Matrix4.identity()
-            ..translate(100.0, .0, .0)
-            ..rotateY(-pi / 2)
-          //
-          ,
-          alignment: Alignment.center,
-          child: Container(
-            color: Colors.orange,
-            child: const FlutterLogo(
-              size: 200,
-            ),
-          ),
+        CubeFace(
+          color: Colors.purple,
+          translateX: -100,
+          rotateY: -pi / 2,
         ),
-        Transform(
-          transform: Matrix4.identity()..translate(.0, .0, -100.0)
-          //
-          ,
-          child: Container(
-            color: Colors.red,
-            child: const FlutterLogo(
-              size: 200,
-            ),
-          ),
+        CubeFace(
+          color: Colors.black,
+          translateZ: 100,
+        ),
+        CubeFace(
+          color: Colors.orange,
+          translateX: 100.0,
+          rotateY: -pi / 2,
+        ),
+        CubeFace(
+          color: Colors.pink,
+          translateY: -100.0,
+          rotateX: -pi / 2,
+        ),
+        CubeFace(
+          color: Colors.red,
+          translateZ: -100.0,
         ),
       ],
     );
   }
+}
 
-  _buildFace() {
+class CubeFace extends StatelessWidget {
+  final double? rotateX;
+  final double? rotateY;
+  final double? rotateZ;
+
+  final double? translateX;
+  final double? translateY;
+  final double? translateZ;
+
+  final Color color;
+
+  const CubeFace({
+    this.rotateX,
+    this.rotateY,
+    this.rotateZ,
+    this.translateX,
+    this.translateY,
+    this.translateZ,
+    required this.color,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Matrix4 transform = Matrix4.identity();
+
+    if (translateX != null || translateY != null || translateZ != null) {
+      transform.translate(translateX ?? .0, translateY ?? .0, translateZ ?? .0);
+    }
+
+    if (rotateX != null) {
+      transform.rotateX(rotateX!);
+    }
+
+    if (rotateY != null) {
+      transform.rotateY(rotateY!);
+    }
+
+    if (rotateZ != null) {
+      transform.rotateZ(rotateZ!);
+    }
+
     return Transform(
-      transform: Matrix4.identity()
-        ..translate(.0, 100.0, .0)
-        ..rotateX(pi / 2)
-
-      //
-      ,
+      transform: transform,
       alignment: Alignment.center,
       child: Container(
-        color: Colors.blue,
+        color: color,
         child: const FlutterLogo(
           size: 200,
         ),
