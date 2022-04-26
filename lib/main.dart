@@ -29,30 +29,35 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Transform(
-      transform: Matrix4.identity()
-        ..setEntry(3, 2, 0.001)
-        ..rotateX(_offset.dy * pi / 180)
-        ..rotateY(_offset.dx * pi / 180)
-      //
-      ,
-      alignment: Alignment.center,
-      child: GestureDetector(
-        onPanUpdate: (details) {
-          _offset += details.delta;
-          setState(() {});
-        },
-        child: Scaffold(
-          appBar: AppBar(),
-          body: Center(
-            child: Container(
-              width: 200,
-              height: 200,
-              color: Colors.blue,
-            ),
+    return GestureDetector(
+      onPanUpdate: (details) {
+        _offset += details.delta;
+        setState(() {});
+      },
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Transform(
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateX(_offset.dy * pi / 180)
+            ..rotateY(_offset.dx * pi / 180)
+          //
+          ,
+          alignment: Alignment.center,
+          child: const Center(
+            child: Cube(),
           ),
         ),
       ),
     );
+  }
+}
+
+class Cube extends StatelessWidget {
+  const Cube({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const FlutterLogo();
   }
 }
