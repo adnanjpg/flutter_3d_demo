@@ -9,12 +9,6 @@ void main() {
 const twoPis = 2 * pi;
 const halfPi = pi / 2;
 
-const fullSize = 200.0;
-const fourThirdsSize = fullSize * 0.75;
-const halfSize = fullSize / 2;
-const quarterSize = fullSize / 4;
-const eighthSize = fullSize / 8;
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -61,7 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
               ,
               alignment: Alignment.center,
               child: const Center(
-                child: Cube(color: Colors.green),
+                child: Cube(
+                  color: Colors.green,
+                  fullSize: 200,
+                  halfSize: 120,
+                ),
               ),
             ),
             const SizedBox(height: 32),
@@ -116,10 +114,19 @@ class _AngleSlider extends StatelessWidget {
 
 class Cube extends StatelessWidget {
   final Color color;
+
+  final double fullSize;
+  final double halfSize;
   const Cube({
     required this.color,
+    required this.fullSize,
+    required this.halfSize,
     Key? key,
   }) : super(key: key);
+
+  double get threeFourthsSize => fullSize - halfSize / 2;
+
+  double get quarterSize => halfSize / 2;
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +141,7 @@ class Cube extends StatelessWidget {
         ),
         CubeFace(
           color: color,
-          translateX: fourThirdsSize,
+          translateX: threeFourthsSize,
           rotateY: -halfPi,
           width: halfSize,
           height: fullSize,
@@ -160,7 +167,7 @@ class Cube extends StatelessWidget {
         ),
         CubeFace(
           color: color,
-          translateY: fourThirdsSize,
+          translateY: threeFourthsSize,
           rotateX: -halfPi,
           width: fullSize,
           height: halfSize,
