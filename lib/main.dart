@@ -6,7 +6,14 @@ void main() {
   runApp(const MyApp());
 }
 
-const twoPIs = 2 * pi;
+const twoPis = 2 * pi;
+const halfPi = pi / 2;
+
+const fullSize = 200.0;
+const fourThirdsSize = fullSize * 0.75;
+const halfSize = fullSize / 2;
+const quarterSize = fullSize / 4;
+const eighthSize = fullSize / 8;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -34,8 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _rx += details.delta.dx;
         _ry += details.delta.dy;
 
-        _rx %= twoPIs;
-        _ry %= twoPIs;
+        _rx %= twoPis;
+        _ry %= twoPis;
 
         setState(() {});
       },
@@ -101,7 +108,7 @@ class _AngleSlider extends StatelessWidget {
     return Slider.adaptive(
       value: angle,
       min: 0,
-      max: twoPIs,
+      max: twoPis,
       onChanged: onChanged?.call,
     );
   }
@@ -115,32 +122,44 @@ class Cube extends StatelessWidget {
     return Stack(
       children: const [
         CubeFace(
-          color: Colors.blue,
-          translateY: 100.0,
-          rotateX: -pi / 2,
-        ),
-        CubeFace(
           color: Colors.purple,
-          translateX: -100,
-          rotateY: -pi / 2,
+          translateX: -quarterSize,
+          rotateY: -halfPi,
+          width: halfSize,
+          height: fullSize,
         ),
         CubeFace(
           color: Colors.black,
-          translateZ: 100,
-        ),
-        CubeFace(
-          color: Colors.orange,
-          translateX: 100.0,
-          rotateY: -pi / 2,
+          translateZ: quarterSize,
+          width: fullSize,
+          height: fullSize,
         ),
         CubeFace(
           color: Colors.pink,
-          translateY: -100.0,
-          rotateX: -pi / 2,
+          translateY: -quarterSize,
+          rotateX: -halfPi,
+          width: fullSize,
+          height: halfSize,
+        ),
+        CubeFace(
+          color: Colors.orange,
+          translateX: fourThirdsSize,
+          rotateY: -halfPi,
+          width: halfSize,
+          height: fullSize,
         ),
         CubeFace(
           color: Colors.red,
-          translateZ: -100.0,
+          translateZ: -quarterSize,
+          width: fullSize,
+          height: fullSize,
+        ),
+        CubeFace(
+          color: Colors.green,
+          translateY: fourThirdsSize,
+          rotateX: -halfPi,
+          width: fullSize,
+          height: halfSize,
         ),
       ],
     );
@@ -156,6 +175,9 @@ class CubeFace extends StatelessWidget {
   final double? translateY;
   final double? translateZ;
 
+  final double width;
+  final double height;
+
   final Color color;
 
   const CubeFace({
@@ -166,6 +188,8 @@ class CubeFace extends StatelessWidget {
     this.translateY,
     this.translateZ,
     required this.color,
+    required this.width,
+    required this.height,
     Key? key,
   }) : super(key: key);
 
@@ -193,10 +217,10 @@ class CubeFace extends StatelessWidget {
       transform: transform,
       alignment: Alignment.center,
       child: Container(
+        width: width,
+        height: height,
         color: color,
-        child: const FlutterLogo(
-          size: 200,
-        ),
+        child: const Text('a'),
       ),
     );
   }
