@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ,
               alignment: Alignment.center,
               child: const Center(
-                child: Cube(),
+                child: Cube(color: Colors.green),
               ),
             ),
             const SizedBox(height: 32),
@@ -115,47 +115,51 @@ class _AngleSlider extends StatelessWidget {
 }
 
 class Cube extends StatelessWidget {
-  const Cube({Key? key}) : super(key: key);
+  final Color color;
+  const Cube({
+    required this.color,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: const [
+      children: [
         CubeFace(
-          color: Colors.purple,
+          color: color,
           translateX: -quarterSize,
           rotateY: -halfPi,
           width: halfSize,
           height: fullSize,
         ),
         CubeFace(
-          color: Colors.black,
-          translateZ: quarterSize,
-          width: fullSize,
-          height: fullSize,
-        ),
-        CubeFace(
-          color: Colors.pink,
-          translateY: -quarterSize,
-          rotateX: -halfPi,
-          width: fullSize,
-          height: halfSize,
-        ),
-        CubeFace(
-          color: Colors.orange,
+          color: color,
           translateX: fourThirdsSize,
           rotateY: -halfPi,
           width: halfSize,
           height: fullSize,
         ),
         CubeFace(
-          color: Colors.red,
+          color: color,
+          translateZ: quarterSize,
+          width: fullSize,
+          height: fullSize,
+        ),
+        CubeFace(
+          color: color,
           translateZ: -quarterSize,
           width: fullSize,
           height: fullSize,
         ),
         CubeFace(
-          color: Colors.green,
+          color: color,
+          translateY: -quarterSize,
+          rotateX: -halfPi,
+          width: fullSize,
+          height: halfSize,
+        ),
+        CubeFace(
+          color: color,
           translateY: fourThirdsSize,
           rotateX: -halfPi,
           width: fullSize,
@@ -220,7 +224,6 @@ class CubeFace extends StatelessWidget {
         width: width,
         height: height,
         color: color,
-        child: const Text('a'),
       ),
     );
   }
